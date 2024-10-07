@@ -12,6 +12,7 @@
 #include "IndexBuffer.h"
 #include "VertexArray.h"
 #include "Shader.h"
+#include "Texture.h"
 
 int main(void)
 {
@@ -49,10 +50,10 @@ int main(void)
 	{
 		// Define data (triangle) for shader
 		float positions[] = {
-			-0.5f, -0.5f,
-			0.5f, -0.5f,
-			0.5f, 0.5f,
-			-0.5f, 0.5f,
+			-0.5f, -0.5f, 0.0f, 0.0f,	// 0
+			0.5f, -0.5f, 1.0f, 0.0f,	// 1
+			0.5f, 0.5f,	1.0f, 1.0f,		// 2
+			-0.5f, 0.5f, 0.0f, 1.0f		// 3
 		};
 
 		// index buffer: instead of adding all vertices inside positions, add only the unique ones
@@ -63,14 +64,18 @@ int main(void)
 			2, 3, 0,
 		};
 
+		GLCall(glEnable(GL_BLEND));
+		GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+
 		// vertex array object (specifies layout of vertex buffer, i.e. start at 0 with vertex length = 2)
 		unsigned int vao;
 		GLCall(glGenVertexArrays(1, &vao));
 		GLCall(glBindVertexArray(vao));
 
 		VertexArray va;
-		VertexBuffer vb(positions, 4 * 2 * sizeof(float));
+		VertexBuffer vb(positions, 4 * 4 * sizeof(float));
 		VertexBufferLayout layout;
+		layout.Push<float>(2);
 		layout.Push<float>(2);
 		va.AddBuffer(vb, layout);
 
@@ -79,6 +84,10 @@ int main(void)
 		Shader shader("res/shaders/Basic.shader");
 		shader.Bind();
 		shader.SetUnfiform4f("u_Color", 0.8f, 0.3f, 0.8f, 1.0f);
+
+		Texture texture("res/textures/spiderman.png");
+		texture.Bind();
+		shader.SetUnfiform1i("u_Texture", 0);
 
 		// unbind everything
 		va.Unbind();

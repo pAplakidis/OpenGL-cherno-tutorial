@@ -14,7 +14,7 @@ class Shader {
 private:
 	std::string m_FilePath;
 	unsigned int m_RendererID;
-	std::unordered_map<std::string, unsigned int> m_UniformLocationCache;	//caching for uniforms
+	std::unordered_map<std::string, int> m_UniformLocationCache;	//caching for uniforms
 
 public:
 	Shader(const std::string& filepath);
@@ -24,6 +24,8 @@ public:
 	void Unbind() const;
 
 	// Set uniforms
+	void SetUnfiform1i(const std::string& name, int value);
+	void SetUnfiform1f(const std::string& name, float value);
 	void SetUnfiform4f(const std::string& name, float v0, float v1, float f2, float f3);
 
 private:
