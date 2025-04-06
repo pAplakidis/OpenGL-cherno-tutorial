@@ -14,6 +14,9 @@
 #include "Shader.h"
 #include "Texture.h"
 
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+
 int main(void)
 {
 	GLFWwindow* window;
@@ -81,13 +84,15 @@ int main(void)
 
 		IndexBuffer ib(indices, 6);
 
+		glm::mat4 proj = glm::ortho(-2.0f, 2.0f, -1.5f, 1.5f, -1.0f, 1.0f);
+
 		Shader shader("res/shaders/Basic.shader");
 		shader.Bind();
-		shader.SetUnfiform4f("u_Color", 0.8f, 0.3f, 0.8f, 1.0f);
+		shader.SetUniform4f("u_Color", 0.8f, 0.3f, 0.8f, 1.0f);
 
-		Texture texture("res/textures/spiderman.png");
+		Texture texture("res/textures/mario.png");
 		texture.Bind();
-		shader.SetUnfiform1i("u_Texture", 0);
+		shader.SetUniform1i("u_Texture", 0);
 
 		// unbind everything
 		va.Unbind();
@@ -107,7 +112,8 @@ int main(void)
 			renderer.Clear();
 
 			shader.Bind();
-			shader.SetUnfiform4f("u_Color", r, 0.3f, 0.8f, 1.0f);
+			shader.SetUniform4f("u_Color", r, 0.3f, 0.8f, 1.0f);
+			shader.SetUniformMat4f("u_MVP", proj);
 
 			renderer.Draw(va, ib, shader);
 
