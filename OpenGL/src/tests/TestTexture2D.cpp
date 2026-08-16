@@ -40,7 +40,7 @@ namespace test {
 
 		m_Shader = std::make_unique<Shader>("res/shaders/Basic.shader");
 		m_Shader->Bind();
-		m_Shader->SetUniform4f("u_Color", 0.8f, 0.3f, 0.8f, 1.0f);
+		m_Shader->SetUniform4f("u_Color", glm::vec4(0.8f, 0.3f, 0.8f, 1.0f));
 
 		m_Texture = std::make_unique<Texture>("res/textures/gold-dollar.png");
 		m_Shader->SetUniform1i("u_Texture", 0);
